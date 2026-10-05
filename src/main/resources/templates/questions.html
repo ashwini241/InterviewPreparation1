@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Questions · AI Interview Prep</title>
+    <style>
+        /* ---------- reset & base ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #0b1120, #030712);
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        /* animated background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 70% 80%, rgba(56, 189, 248, 0.06), transparent 50%),
+            radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.04), transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ---------- main container ---------- */
+        .questions-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ---------- header card ---------- */
+        .questions-header {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 40px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .questions-header::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20%;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #38bdf8, #a78bfa, transparent);
+            border-radius: 100%;
+            opacity: 0.6;
+        }
+
+        .questions-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f0f9ff 0%, #b6d4ff 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            margin-bottom: 0.3rem;
+        }
+
+        .questions-sub {
+            font-size: 0.95rem;
+            color: rgba(203, 213, 225, 0.4);
+            font-weight: 400;
+        }
+
+        /* ---------- questions list card ---------- */
+        .questions-list-wrapper {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            border-radius: 40px;
+            padding: 2.5rem 2.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .questions-list-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.02), transparent 60%);
+            pointer-events: none;
+        }
+
+        .question-count {
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.3);
+            letter-spacing: 0.5px;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 0.8rem;
+        }
+
+        .question-count span {
+            background: rgba(167, 139, 250, 0.08);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            color: #a78bfa;
+            font-weight: 600;
+        }
+
+        /* ---------- individual questions ---------- */
+        .questions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            counter-reset: question-counter;
+        }
+
+        .questions-list li {
+            counter-increment: question-counter;
+            padding: 1.2rem 1.2rem 1.2rem 3.8rem;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+            font-weight: 400;
+        }
+
+        .questions-list li::before {
+            content: counter(question-counter);
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .questions-list li:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(167, 139, 250, 0.08);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .questions-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* question type badge (if needed) */
+        .question-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.15rem 0.6rem;
+            border-radius: 40px;
+            background: rgba(56, 189, 248, 0.05);
+            color: rgba(56, 189, 248, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.05);
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* ---------- empty state ---------- */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: rgba(148, 163, 184, 0.3);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        /* ---------- action buttons ---------- */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #2563eb, #7c3aed);
+            color: white;
+            box-shadow: 0 6px 20px -6px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 28px -8px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(203, 213, 225, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-secondary:hover {
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ---------- footer ---------- */
+        .questions-footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(148, 163, 184, 0.12);
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 2rem;
+        }
+
+        /* ---------- responsive ---------- */
+        @media (max-width: 768px) {
+            .questions-header {
+                padding: 1.5rem;
+                border-radius: 32px;
+            }
+            .questions-header h2 {
+                font-size: 1.8rem;
+            }
+            .questions-list-wrapper {
+                padding: 1.5rem 1.2rem;
+                border-radius: 32px;
+            }
+            .questions-list li {
+                padding: 1rem 1rem 1rem 3.2rem;
+                font-size: 0.95rem;
+            }
+            .questions-list li::before {
+                width: 1.8rem;
+                height: 1.8rem;
+                font-size: 0.75rem;
+                left: 0.8rem;
+            }
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-action {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            .questions-header {
+                padding: 1.2rem;
+                border-radius: 28px;
+            }
+            .questions-header h2 {
+                font-size: 1.4rem;
+            }
+            .questions-list-wrapper {
+                padding: 1.2rem 0.8rem;
+                border-radius: 24px;
+            }
+            .questions-list li {
+                padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+                font-size: 0.9rem;
+                border-radius: 16px;
+            }
+            .questions-list li::before {
+                width: 1.6rem;
+                height: 1.6rem;
+                font-size: 0.7rem;
+                left: 0.6rem;
+                border-radius: 8px;
+            }
+            .question-count {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* ---------- pulse animation ---------- */
+        @keyframes softPulse {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.02); }
+            50% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0.01); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.02); }
+        }
+        .questions-header {
+            animation: softPulse 4s infinite ease-in-out;
+        }
+
+        /* accessibility */
+        .btn-action:focus-visible {
+            outline: 2px solid #7c3aed;
+            outline-offset: 3px;
+        }
+
+        /* Thymeleaf processing indicator */
+        .thymeleaf-processing {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+<div class="questions-container">
+    <!-- header -->
+    <header class="questions-header">
+        <h2>💡 Interview Questions</h2>
+        <div class="questions-sub">AI-generated questions tailored to your profile</div>
+    </header>
+
+    <!-- questions list -->
+    <div class="questions-list-wrapper">
+        <div class="question-count">
+            📋 Questions generated
+            <span th:text="${#lists.size(questions)}">0</span>
+        </div>
+
+        <!-- Thymeleaf: loop through questions -->
+        <ol class="questions-list" th:if="${questions != null and !questions.isEmpty()}">
+            <li th:each="q : ${questions}" th:text="${q}">
+                <!-- fallback example question -->
+                Sample question appears here
+            </li>
+        </ol>
+
+        <!-- empty state (if no questions) -->
+        <div class="empty-state" th:if="${questions == null or questions.isEmpty()}">
+            <span class="empty-icon">📭</span>
+            <p>No questions generated yet</p>
+            <span style="font-size:0.85rem; color:rgba(148,163,184,0.2);">
+                    Upload a resume to generate interview questions
+                </span>
+        </div>
+    </div>
+
+    <!-- action buttons -->
+    <div class="action-bar">
+        <a href="/uploadResumePage" class="btn-action btn-primary">
+            📄 Upload Another Resume
+        </a>
+        <a href="/startInterview" class="btn-action btn-primary">
+            Start Mock Interview
+        </a>
+        <a href="/dashboard" class="btn-action btn-secondary">
+            ← Dashboard
+        </a>
+    </div>
+
+    <!-- footer -->
+    <div class="questions-footer">
+        ✦ AI Interview Preparation Platform · 2026 ✦
+    </div>
+</div>
+</body>
+</html>

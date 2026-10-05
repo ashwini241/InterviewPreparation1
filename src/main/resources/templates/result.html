@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Result</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .result-card{
+            width:500px;
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 0 15px rgba(0,0,0,0.1);
+            text-align:center;
+        }
+
+        h1{
+            color:#333;
+            margin-bottom:20px;
+        }
+
+        .score{
+            font-size:40px;
+            font-weight:bold;
+            color:#007bff;
+            margin:20px 0;
+        }
+
+        .feedback{
+            font-size:18px;
+            color:#555;
+            margin-bottom:30px;
+        }
+
+        .btn{
+            display:inline-block;
+            text-decoration:none;
+            background:#007bff;
+            color:white;
+            padding:12px 25px;
+            border-radius:8px;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            background:#0056b3;
+        }
+
+        .status{
+            font-size:22px;
+            margin-bottom:15px;
+            font-weight:bold;
+        }
+
+        .excellent{
+            color:green;
+        }
+
+        .good{
+            color:orange;
+        }
+
+        .poor{
+            color:red;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="result-card">
+
+    <h1>Interview Result</h1>
+
+    <div class="score"
+         th:text="${score} + ' / 100'">
+        80 / 100
+    </div>
+
+    <div class="status excellent"
+         th:if="${score >= 80}">
+        Excellent Performance 🎉
+    </div>
+
+    <div class="status good"
+         th:if="${score >= 60 && score < 80}">
+        Good Performance 👍
+    </div>
+
+    <div class="status poor"
+         th:if="${score < 60}">
+        Need More Practice 📚
+    </div>
+
+    <div class="feedback"
+         th:text="${feedback}">
+        Feedback will appear here
+    </div>
+
+    <a href="/dashboard" class="btn">
+        Back To Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
